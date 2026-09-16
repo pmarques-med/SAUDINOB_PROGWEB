@@ -1,0 +1,36 @@
+@baseUrl = http://localhost:3000/api
+
+### Health
+GET {{baseUrl}}/health
+
+### Login utente
+# @name patientLogin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "ana.patient@example.org",
+  "password": "demo123"
+}
+
+### Histórico CARAT
+GET {{baseUrl}}/patients/1/carat
+Authorization: Bearer {{patientLogin.response.body.token}}
+
+### Login médico
+# @name doctorLogin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "miguel.doctor@example.org",
+  "password": "demo123"
+}
+
+### Utentes do médico
+GET {{baseUrl}}/doctors/10/patients
+Authorization: Bearer {{doctorLogin.response.body.token}}
+
+### Alertas do médico
+GET {{baseUrl}}/doctors/10/alerts
+Authorization: Bearer {{doctorLogin.response.body.token}}
