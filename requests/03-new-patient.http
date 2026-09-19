@@ -1,0 +1,38 @@
+@baseUrl = http://localhost:3000/api
+@token = COLOCAR_TOKEN_AQUI
+@doctorId = 10
+
+### 1. Admitir um novo doente
+POST {{baseUrl}}/doctors/{{doctorId}}/patients
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Maria Silva",
+  "email": "maria.silva@example.org",
+  "birthDate": "1982-04-16",
+  "sex": "F",
+  "admissionDate": "2026-09-19",
+  "height": 1.65,
+  "weight": 72,
+  "smoker": false,
+  "diabetes": false,
+  "hypertension": true,
+  "asthma": false,
+  "allergies": "Penicilina",
+  "medication": "Losartan"
+}
+
+### IMPORTANTE
+# A resposta contém o ID atribuído ao novo doente.
+# Guardem esse ID para poderem consultar o novo recurso.
+
+### 2. Confirmar que o novo doente aparece na lista
+GET {{baseUrl}}/doctors/{{doctorId}}/patients
+Authorization: Bearer {{token}}
+
+### Questões
+# - Qual é a diferença entre este POST e os GET anteriores?
+# - Onde podem observar o JSON enviado nas Developer Tools / cliente HTTP?
+# - Qual foi o status code devolvido quando o recurso foi criado?
+# - O que acontece se executarem novamente exatamente o mesmo POST?

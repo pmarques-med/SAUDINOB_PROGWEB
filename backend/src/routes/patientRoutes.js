@@ -1,9 +1,11 @@
 import {Router} from "express";
 import {authenticate} from "../middleware/auth.js";
-import {getPatientController,getCaratController,createCaratController,getPatientAlertsController} from "../controllers/patientController.js";
+import {getPatientController,getCaratController,createCaratController,getPatientAlertsController,getMeasurementsController,getLatestVitalsController} from "../controllers/patientController.js";
 const router=Router();
 router.use(authenticate);
 router.get("/:id",getPatientController);
+router.get("/:id/measurements",getMeasurementsController);
+router.get("/:id/vitals/latest",getLatestVitalsController);
 router.get("/:id/carat",getCaratController);
 router.post("/:id/carat",createCaratController);
 router.get("/:id/alerts",getPatientAlertsController);

@@ -1,0 +1,22 @@
+@baseUrl = http://localhost:3000/api
+@token = COLOCAR_TOKEN_AQUI
+@doctorId = 10
+@patientId = 1
+
+### 1. Listar os doentes associados ao médico autenticado
+GET {{baseUrl}}/doctors/{{doctorId}}/patients
+Authorization: Bearer {{token}}
+
+### 2. Consultar o detalhe de um doente
+GET {{baseUrl}}/patients/{{patientId}}
+Authorization: Bearer {{token}}
+
+### 3. Experimentar outro doente do mesmo médico
+GET {{baseUrl}}/patients/2
+Authorization: Bearer {{token}}
+
+### Questões
+# - Onde está o token neste pedido?
+# - Que método HTTP foi utilizado?
+# - Que Content-Type é devolvido pelo servidor?
+# - Que campos do JSON poderão ser usados no dashboard?

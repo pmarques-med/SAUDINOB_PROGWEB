@@ -1,0 +1,23 @@
+@baseUrl = http://localhost:3000/api
+@token = COLOCAR_TOKEN_AQUI
+@patientId = 1
+
+### 1. Frequência cardíaca atual
+# Executar várias vezes e comparar heartRate e timestamp.
+GET {{baseUrl}}/patients/{{patientId}}/vitals/latest
+Authorization: Bearer {{token}}
+
+### 2. Executar novamente
+GET {{baseUrl}}/patients/{{patientId}}/vitals/latest
+Authorization: Bearer {{token}}
+
+### 3. E novamente...
+GET {{baseUrl}}/patients/{{patientId}}/vitals/latest
+Authorization: Bearer {{token}}
+
+### Questões
+# - O valor de heartRate é sempre igual?
+# - O timestamp é alterado?
+# - Estes dados são persistidos na base de dados?
+# - Como poderiam fazer este pedido automaticamente de 5 em 5 segundos no browser?
+# - Porque é que essa solução se chama polling?

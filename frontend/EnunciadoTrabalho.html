@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trabalho Prático — Aplicação de Acompanhamento Clínico</title>
+<style>
+  :root { --ink:#172033; --muted:#5d6677; --line:#dce1e8; --soft:#f6f8fb; --accent:#2457c5; --ok:#eef7f1; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:var(--ink); background:#fff; line-height:1.58; }
+  header { background:var(--soft); border-bottom:1px solid var(--line); padding:3rem 1.25rem 2.4rem; }
+  header div, main, footer { max-width:960px; margin:auto; }
+  h1 { font-size:clamp(2rem,5vw,3.2rem); line-height:1.05; margin:0 0 .8rem; }
+  header p { color:var(--muted); font-size:1.1rem; margin:.3rem 0; }
+  main { padding:2rem 1.25rem 4rem; }
+  section { padding:1.3rem 0; border-bottom:1px solid var(--line); }
+  h2 { margin:.2rem 0 .8rem; font-size:1.55rem; }
+  h3 { margin:1.2rem 0 .5rem; font-size:1.15rem; }
+  code { background:var(--soft); padding:.12rem .32rem; border-radius:.25rem; }
+  .flow { background:var(--soft); border:1px solid var(--line); padding:1rem; border-radius:.65rem; font-weight:650; }
+  .question { margin:1.2rem 0 .4rem; padding:1rem; border-left:4px solid var(--accent); background:#f8faff; border-radius:.35rem; }
+  .question strong { display:block; margin-bottom:.55rem; }
+  button.solution-toggle { border:1px solid var(--accent); color:var(--accent); background:white; border-radius:.45rem; padding:.48rem .8rem; font:inherit; font-weight:650; cursor:pointer; }
+  button.solution-toggle:hover { background:#f2f6ff; }
+  .solution { margin-top:.8rem; padding:.85rem 1rem; background:var(--ok); border:1px solid #cfe5d5; border-radius:.45rem; }
+  .solution[hidden] { display:none; }
+  .note { color:var(--muted); }
+  .resources { margin:1rem 0; padding:.9rem 1rem; background:#fffaf0; border:1px solid #ead9ad; border-radius:.5rem; }
+  .resources strong { display:block; margin-bottom:.35rem; }
+  .resources a { color:#174ea6; }
+  .resources ul { margin:.35rem 0 .1rem; }
+  ul { padding-left:1.35rem; }
+  footer { padding:1.5rem 1.25rem 3rem; color:var(--muted); }
+  @media print {
+    button.solution-toggle { display:none; }
+    .solution[hidden] { display:block; }
+  }
+</style>
+</head>
+<body>
+<header><div>
+  <h1>Trabalho Prático — Desenvolvimento do Frontend de uma Aplicação de Acompanhamento Clínico</h1>
+  <p><strong>Programação Web</strong> · HTML5 semântico + JavaScript nativo</p>
+</div></header>
+
+<main>
+<section>
+<h2>1. Contexto</h2>
+<p>Uma unidade de saúde pretende disponibilizar aos profissionais uma aplicação Web simples para acompanhamento dos seus doentes.</p>
+<p>O profissional deverá autenticar-se no sistema. Após autenticação, terá acesso aos doentes que acompanha e poderá realizar a admissão de um novo doente, registando os seus dados de identificação, informação básica de admissão e um conjunto reduzido de elementos da história clínica.</p>
+<p>A partir da lista de doentes, o profissional poderá selecionar um doente e aceder à respetiva área clínica individual. Esta área funcionará como um pequeno dashboard, combinando informação relativamente estável — dados de identificação e história clínica — com informação que evolui ao longo do tempo.</p>
+<p>No dashboard deverá ser possível visualizar a evolução do índice de massa corporal (IMC) e acompanhar a frequência cardíaca do doente, obtida periodicamente a partir do backend.</p>
+<p>O objetivo não é desenvolver um sistema clínico completo, mas utilizar este cenário para explorar os principais mecanismos envolvidos no desenvolvimento de um frontend Web e na sua comunicação com um backend.</p>
+</section>
+
+<section>
+<h2>2. Tecnologias e regras</h2>
+<ul>
+<li>HTML5, privilegiando elementos semânticos;</li><li>JavaScript nativo (vanilla JavaScript);</li>
+<li>DOM API e eventos;</li><li>Fetch API para comunicação HTTP/REST;</li>
+<li>Web Storage API, quando necessário;</li><li>Developer Tools do browser.</li>
+</ul>
+<p>Não devem ser utilizados frameworks frontend como React, Vue ou Angular. Poderá ser autorizada uma biblioteca exclusivamente para a representação gráfica da evolução do IMC.</p>
+<div class="resources"><strong>📚 Documentação de apoio</strong><ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements" target="_blank" rel="noopener">MDN — HTML elements reference</a></li>
+<li><a href="https://validator.w3.org/" target="_blank" rel="noopener">W3C — Markup Validation Service</a> (validar o HTML produzido)</li>
+</ul></div>
+</section>
+
+<section>
+<h2>3. Percurso funcional</h2>
+<p class="flow">Autenticação → Lista de doentes → Admissão de novo doente ou seleção de doente existente → Dashboard individual do doente</p>
+</section>
+
+<section>
+<h2>4. Autenticação</h2>
+<p>A aplicação deverá iniciar com um formulário de autenticação. A submissão deverá ser tratada em JavaScript e originar um pedido ao endpoint de login através de <code>fetch()</code>.</p>
+<p>Após autenticação bem-sucedida, o frontend deverá guardar temporariamente o JWT e a informação necessária sobre o utilizador autenticado. Para este exercício poderá ser utilizado <code>sessionStorage</code>. Nos endpoints protegidos, o token deverá ser enviado no cabeçalho <code>Authorization: Bearer &lt;token&gt;</code>.</p>
+<div class="resources"><strong>📚 Documentação de apoio</strong><ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch" target="_blank" rel="noopener">MDN — Using the Fetch API</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage" target="_blank" rel="noopener">MDN — sessionStorage</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API" target="_blank" rel="noopener">MDN — Web Storage API</a></li>
+</ul></div>
+<div class="question"><strong>Questões de exploração</strong>
+Que dados são enviados no login? Que dados são devolvidos? Onde se encontra o token? Qual a diferença entre guardar informação numa variável JavaScript e em <code>sessionStorage</code>?
+<br><br><button class="solution-toggle" aria-expanded="false">Ver solução</button>
+<div class="solution" hidden>
+<p>No login, o frontend envia as credenciais necessárias ao endpoint, normalmente num corpo JSON. O backend devolve uma resposta JSON que inclui o resultado da autenticação e, neste exercício, um JWT e informação sobre o utilizador.</p>
+<p>O token encontra-se na resposta ao login e deverá depois ser enviado nos pedidos protegidos através do cabeçalho <code>Authorization</code>. Uma variável JavaScript existe apenas enquanto a página/contexto que a criou se mantiver carregado. O <code>sessionStorage</code> permite manter valores entre páginas do mesmo separador e é eliminado quando a sessão desse separador termina.</p>
+</div></div>
+</section>
+
+<section>
+<h2>5. Área do médico — lista de doentes</h2>
+<p>Após o login, o profissional deverá visualizar os doentes que lhe estão associados. A lista deverá ser obtida através da API e construída dinamicamente através da DOM API.</p>
+<p>Não deverá ser assumido um identificador fixo para o médico. Utilizem a informação do utilizador autenticado devolvida pelo backend. Cada doente deverá permitir navegar para a respetiva área clínica individual e deverá existir uma opção para admitir um novo doente.</p>
+<div class="resources"><strong>📚 Documentação de apoio</strong><ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement" target="_blank" rel="noopener">MDN — document.createElement()</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild" target="_blank" rel="noopener">MDN — appendChild()</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent" target="_blank" rel="noopener">MDN — textContent</a></li>
+</ul></div>
+</section>
+
+<section>
+<h2>6. Admissão de um novo doente</h2>
+<p>Criem uma página ou área com um formulário para registar um novo doente.</p>
+<h3>6.1 Informação a recolher</h3>
+<ul>
+<li>Identificação: nome, data de nascimento, sexo e email;</li>
+<li>Admissão: data de admissão, altura e peso;</li>
+<li>História clínica simplificada: fumador, diabetes, hipertensão e asma;</li>
+<li>Alergias e medicação habitual.</li>
+</ul>
+<p>Utilizem controlos HTML adequados ao tipo de informação e organizem os campos recorrendo, quando adequado, a <code>form</code>, <code>fieldset</code>, <code>legend</code> e <code>label</code>.</p>
+<div class="resources"><strong>📚 Documentação de apoio</strong><ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/form" target="_blank" rel="noopener">MDN — &lt;form&gt;</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/How_to_structure_a_web_form" target="_blank" rel="noopener">MDN — How to structure a web form</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input" target="_blank" rel="noopener">MDN — &lt;input&gt; types and attributes</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Form_validation" target="_blank" rel="noopener">MDN — Client-side form validation</a></li>
+</ul></div>
+<h3>6.2 Validação e envio</h3>
+<p>Utilizem atributos como <code>required</code>, <code>min</code> e <code>max</code>. A submissão deverá ser tratada através do evento <code>submit</code>. O JavaScript deverá ler os valores, construir um objeto, convertê-lo para JSON e enviá-lo ao backend através de um pedido POST.</p>
+<div class="question"><strong>Questão de reflexão</strong>
+Comparem o pedido GET utilizado para obter informação com o POST utilizado para criar um recurso. Que diferenças observam no método, headers, body e resposta?
+<br><br><button class="solution-toggle" aria-expanded="false">Ver solução</button>
+<div class="solution" hidden>
+<ul>
+<li><strong>GET:</strong> é utilizado aqui para consultar recursos; normalmente não envia um <code>body</code>.</li>
+<li><strong>POST:</strong> é utilizado aqui para criar um novo recurso e envia os dados no <code>body</code>, neste caso em JSON.</li>
+<li>No POST é necessário indicar <code>Content-Type: application/json</code>. Em endpoints protegidos, tanto GET como POST podem necessitar do cabeçalho <code>Authorization</code>.</li>
+<li>A resposta de um GET contém tipicamente os dados pedidos; a resposta ao POST pode devolver o recurso criado e um código de sucesso apropriado.</li>
+</ul>
+</div></div>
+</section>
+
+<section>
+<h2>7. Dashboard individual do doente</h2>
+<p>A página de detalhe deverá funcionar como um pequeno dashboard clínico. O identificador do doente poderá ser recebido através da query string e lido com <code>URLSearchParams</code>.</p>
+<div class="resources"><strong>📚 Documentação de apoio</strong><ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams" target="_blank" rel="noopener">MDN — URLSearchParams</a></li>
+</ul></div>
+<ul>
+<li>identificação e informação básica;</li><li>dados de admissão;</li><li>resumo da história clínica;</li>
+<li>peso/altura/IMC atual;</li><li>gráfico da evolução do IMC;</li><li>card de frequência cardíaca.</li>
+</ul>
+</section>
+
+<section>
+<h2>8. Evolução do IMC</h2>
+<p>Obtenham do backend os registos necessários para representar a evolução do IMC ao longo do tempo. Os dados deverão ser tratados em JavaScript e representados num gráfico de linhas.</p>
+<div class="resources"><strong>📚 Documentação de apoio</strong><ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map" target="_blank" rel="noopener">MDN — Array.map()</a></li>
+<li><a href="https://www.chartjs.org/docs/latest/" target="_blank" rel="noopener">Chart.js — Documentation</a> (caso esta biblioteca seja autorizada)</li>
+</ul></div>
+<div class="question"><strong>Questão de reflexão</strong>
+Qual a diferença entre apresentar apenas o IMC atual e representar uma série temporal de valores?
+<br><br><button class="solution-toggle" aria-expanded="false">Ver solução</button>
+<div class="solution" hidden>
+<p>O IMC atual representa apenas o estado num determinado momento. Uma série temporal associa vários valores às respetivas datas, permitindo observar a evolução do indicador, incluindo aumentos, diminuições ou períodos de estabilidade.</p>
+</div></div>
+</section>
+
+<section>
+<h2>9. Frequência cardíaca — atualização dinâmica por polling</h2>
+<p>O dashboard deverá conter um card com a frequência cardíaca atual e a hora da última atualização. Como requisito base, o frontend deverá consultar periodicamente o backend através de <code>fetch()</code> e utilizar <code>setInterval()</code> para implementar polling, sem recarregar a página.</p>
+<div class="resources"><strong>📚 Documentação de apoio</strong><ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/setInterval" target="_blank" rel="noopener">MDN — setInterval()</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch" target="_blank" rel="noopener">MDN — Using the Fetch API</a></li>
+</ul></div>
+<p>Observem no separador Network os pedidos sucessivos. Registem o intervalo escolhido e analisem o efeito de um intervalo excessivamente curto ou de muitos utilizadores em simultâneo.</p>
+<div class="question"><strong>Questões de reflexão</strong>
+Por que razão polling não corresponde a comunicação iniciada pelo servidor? O que acontece quando o frontend faz um pedido mas a frequência cardíaca não se alterou?
+<br><br><button class="solution-toggle" aria-expanded="false">Ver solução</button>
+<div class="solution" hidden>
+<p>No polling é sempre o cliente que inicia a comunicação: de tempos a tempos pergunta ao servidor se existem novos dados. O servidor apenas responde ao pedido recebido.</p>
+<p>Se o valor não tiver mudado, o pedido HTTP e a respetiva resposta continuam a ocorrer. Assim, podem existir comunicações desnecessárias. Intervalos muito curtos e muitos clientes aumentam o número de pedidos e a carga sobre o servidor e a rede.</p>
+</div></div>
+</section>
+
+<section>
+<h2>10. Desafio extra — WebSocket</h2>
+<p>Como desafio adicional, substituam o polling da frequência cardíaca por uma ligação WebSocket, permitindo que o backend envie novos valores através de uma ligação persistente.</p>
+<div class="resources"><strong>📚 Documentação de apoio</strong><ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API" target="_blank" rel="noopener">MDN — WebSocket API</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSocket" target="_blank" rel="noopener">MDN — WebSocket interface</a></li>
+</ul></div>
+<div class="question"><strong>Questão de comparação</strong>
+Quais as funcionalidades desta aplicação que manteriam baseadas em REST e quais poderiam beneficiar de WebSocket?
+<br><br><button class="solution-toggle" aria-expanded="false">Ver solução</button>
+<div class="solution" hidden>
+<p>Operações pontuais como autenticação, obtenção da lista de doentes, consulta do detalhe, criação de um doente e obtenção do histórico de IMC encaixam naturalmente em pedidos HTTP/REST. A monitorização frequente da frequência cardíaca pode beneficiar de WebSocket, porque a ligação persistente permite ao servidor enviar novos valores quando estes estão disponíveis.</p>
+</div></div>
+</section>
+
+<section>
+<h2>11. DOM, eventos e segurança</h2>
+<p>Privilegiem <code>document.createElement()</code>, <code>textContent</code>, <code>appendChild()</code> e outras operações explícitas sobre o DOM, em vez de inserir indiscriminadamente strings através de <code>innerHTML</code>.</p>
+<div class="resources"><strong>📚 Documentação de apoio</strong><ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML" target="_blank" rel="noopener">MDN — innerHTML (inclui considerações de segurança)</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/XSS" target="_blank" rel="noopener">MDN — Cross-site scripting (XSS)</a></li>
+</ul></div>
+<div class="question"><strong>Questão de reflexão</strong>
+Que risco existe se conteúdo proveniente do utilizador ou da API for inserido diretamente através de <code>innerHTML</code>? Relacionem a resposta com XSS.
+<br><br><button class="solution-toggle" aria-expanded="false">Ver solução</button>
+<div class="solution" hidden>
+<p>Se dados não confiáveis forem interpretados como HTML, podem introduzir elementos ou código malicioso na página. Isto pode criar uma vulnerabilidade de Cross-Site Scripting (XSS). Ao usar <code>textContent</code> para texto, o browser trata o valor como conteúdo textual em vez de o interpretar como HTML.</p>
+</div></div>
+</section>
+
+<section>
+<h2>12. Tratamento de erros HTTP</h2>
+<p>Verifiquem <code>response.ok</code> e apresentem mensagens adequadas ao utilizador.</p>
+<div class="resources"><strong>📚 Documentação de apoio</strong><ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Response/ok" target="_blank" rel="noopener">MDN — Response.ok</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status" target="_blank" rel="noopener">MDN — HTTP response status codes</a></li>
+</ul></div>
+<ul><li><strong>401</strong> — recurso protegido sem autenticação/token válido;</li>
+<li><strong>403</strong> — utilizador autenticado sem autorização;</li>
+<li><strong>404</strong> — recurso ou endpoint inexistente;</li>
+<li><strong>400</strong> ou erro de validação — dados enviados não aceites pelo backend, quando aplicável.</li></ul>
+</section>
+
+<section>
+<h2>13. Exploração com Developer Tools</h2>
+<p>Analisem no Network pelo menos um login, um GET, o POST de criação de um doente e os pedidos periódicos de frequência cardíaca. Identifiquem URL, método, status, headers, payload quando aplicável e resposta. Localizem também o JWT.</p>
+</section>
+
+<section>
+<h2>14. Organização do JavaScript</h2>
+<p>Identifiquem no código responsabilidades distintas: manipulação da interface/DOM, tratamento de eventos, lógica da aplicação, comunicação com a API e gestão de estado/sessão. Não é necessário implementar uma arquitetura complexa.</p>
+</section>
+
+<section>
+<h2>15. Entregável</h2>
+<ul>
+<li><code>backend/</code> — backend disponibilizado;</li>
+<li><code>frontend/index.html</code> — autenticação;</li>
+<li><code>frontend/patients.html</code> — lista de doentes;</li>
+<li><code>frontend/new-patient.html</code> — formulário de admissão;</li>
+<li><code>frontend/patient.html</code> — dashboard individual;</li>
+<li>ficheiros JavaScript correspondentes;</li>
+<li><code>frontend/README.md</code> — instruções e respostas breves às questões.</li>
+</ul>
+</section>
+
+<section>
+<h2>16. Critérios de sucesso</h2>
+<ul>
+<li>Autenticação funcional e utilização correta do JWT;</li><li>HTML semanticamente adequado;</li>
+<li>Lista de doentes obtida através da API;</li><li>Criação de doente através de formulário e POST JSON;</li>
+<li>Validação e feedback;</li><li>Dashboard individual;</li><li>gráfico de evolução do IMC;</li>
+<li>frequência cardíaca atualizada por polling;</li><li>tratamento de erros HTTP;</li>
+<li>utilização das Developer Tools;</li><li>JavaScript compreensível e organizado;</li>
+<li>Extra: WebSocket.</li>
+</ul>
+</section>
+
+<section>
+<h2>17. Conceitos trabalhados</h2>
+<p>HTML semântico · formulários · validação HTML · DOM · eventos · JavaScript assíncrono · Fetch API · HTTP · REST · GET e POST · JSON · autenticação · autorização · JWT · sessionStorage · query strings · arrays e séries temporais · visualização de dados · polling · Developer Tools · tratamento de erros · segurança/XSS · WebSocket (extra) · separação de responsabilidades.</p>
+</section>
+</main>
+
+<footer>Programação Web — Trabalho Prático</footer>
+<script>
+document.querySelectorAll(".solution-toggle").forEach(button => {
+  button.addEventListener("click", () => {
+    const solution = button.nextElementSibling;
+    const isHidden = solution.hasAttribute("hidden");
+    if (isHidden) {
+      solution.removeAttribute("hidden");
+      button.textContent = "Esconder solução";
+      button.setAttribute("aria-expanded", "true");
+    } else {
+      solution.setAttribute("hidden", "");
+      button.textContent = "Ver solução";
+      button.setAttribute("aria-expanded", "false");
+    }
+  });
+});
+</script>
+</body>
+</html>

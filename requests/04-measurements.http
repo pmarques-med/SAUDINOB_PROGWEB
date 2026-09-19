@@ -1,0 +1,17 @@
+@baseUrl = http://localhost:3000/api
+@token = COLOCAR_TOKEN_AQUI
+@patientId = 1
+
+### 1. Obter o histórico de medições
+GET {{baseUrl}}/patients/{{patientId}}/measurements
+Authorization: Bearer {{token}}
+
+### 2. Histórico de outro doente
+GET {{baseUrl}}/patients/2/measurements
+Authorization: Bearer {{token}}
+
+### Questões
+# - Quantas medições existem?
+# - Que campos são armazenados/fornecidos para cada medição?
+# - O IMC varia ao longo do tempo?
+# - Como transformariam esta resposta nos arrays necessários para um gráfico?

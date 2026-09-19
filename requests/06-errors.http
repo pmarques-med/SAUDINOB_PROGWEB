@@ -1,0 +1,54 @@
+@baseUrl = http://localhost:3000/api
+@token = COLOCAR_TOKEN_AQUI
+@doctorId = 10
+
+### 1. 401 — pedido protegido sem token
+GET {{baseUrl}}/patients/1
+
+### 2. 401 — token inválido
+GET {{baseUrl}}/patients/1
+Authorization: Bearer token-invalido
+
+### 3. 403 — tentar usar a identidade de outro médico
+# O JWT pertence ao médico 10, mas o URL indica o médico 999.
+GET {{baseUrl}}/doctors/999/patients
+Authorization: Bearer {{token}}
+
+### 4. 404 — endpoint inexistente
+GET {{baseUrl}}/isto-nao-existe
+Authorization: Bearer {{token}}
+
+### 5. 404 — doente inexistente
+# Nota: dependendo da autorização aplicada, comparem a resposta com o caso anterior.
+GET {{baseUrl}}/patients/99999
+Authorization: Bearer {{token}}
+
+### 6. 400 — criação de doente com campos obrigatórios em falta
+POST {{baseUrl}}/doctors/{{doctorId}}/patients
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Doente Incompleto",
+  "email": "incompleto@example.org"
+}
+
+### 7. 400 — peso/altura inválidos
+POST {{baseUrl}}/doctors/{{doctorId}}/patients
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Teste Valores",
+  "email": "valores@example.org",
+  "birthDate": "1980-01-01",
+  "sex": "M",
+  "admissionDate": "2026-09-19",
+  "height": 0,
+  "weight": -10
+}
+
+### Questões
+# - Comparem 400, 401, 403 e 404.
+# - Em que casos o utilizador está autenticado mas não autorizado?
+# - Que informação é útil apresentar ao utilizador e que informação deve ficar apenas para debugging?

@@ -1,0 +1,24 @@
+@baseUrl = http://localhost:3000/api
+
+### 1. Verificar se a API está disponível
+GET {{baseUrl}}/health
+
+### 2. Login do médico
+# Copiar o token da resposta para os restantes ficheiros.
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "miguel.doctor@example.org",
+  "password": "demo123"
+}
+
+### 3. Login com password incorreta
+# Observar o status HTTP devolvido.
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "miguel.doctor@example.org",
+  "password": "password-incorreta"
+}
