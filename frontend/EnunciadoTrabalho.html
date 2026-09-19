@@ -16,6 +16,7 @@
   section { padding:1.3rem 0; border-bottom:1px solid var(--line); }
   h2 { margin:.2rem 0 .8rem; font-size:1.55rem; }
   h3 { margin:1.2rem 0 .5rem; font-size:1.15rem; }
+  .wireframe {    width: 100%;    height: auto;    display: block;    margin: 20px auto;}
   code { background:var(--soft); padding:.12rem .32rem; border-radius:.25rem; }
   .flow { background:var(--soft); border:1px solid var(--line); padding:1rem; border-radius:.65rem; font-weight:650; }
   .question { margin:1.2rem 0 .4rem; padding:1rem; border-left:4px solid var(--accent); background:#f8faff; border-radius:.35rem; }
@@ -29,6 +30,16 @@
   .resources strong { display:block; margin-bottom:.35rem; }
   .resources a { color:#174ea6; }
   .resources ul { margin:.35rem 0 .1rem; }
+  .api-summary { width:100%; border-collapse:collapse; margin:1rem 0 1.25rem; font-size:.96rem; }
+  .api-summary th, .api-summary td { border:1px solid var(--line); padding:.65rem .7rem; text-align:left; vertical-align:top; }
+  .api-summary th { background:var(--soft); }
+  details.endpoint { margin:.75rem 0; border:1px solid var(--line); border-radius:.6rem; overflow:hidden; background:#fff; }
+  details.endpoint summary { cursor:pointer; padding:.8rem 1rem; font-weight:700; background:var(--soft); }
+  details.endpoint > div { padding:.9rem 1rem 1rem; }
+  .method { display:inline-block; min-width:3.5rem; text-align:center; margin-right:.45rem; padding:.12rem .35rem; border-radius:.3rem; background:#eaf0ff; color:#163f9a; font-size:.85rem; }
+  pre { overflow:auto; background:#111827; color:#f3f4f6; padding:.85rem 1rem; border-radius:.45rem; line-height:1.45; }
+  pre code { background:transparent; padding:0; color:inherit; }
+  .status { white-space:nowrap; }
   ul { padding-left:1.35rem; }
   footer { padding:1.5rem 1.25rem 3rem; color:var(--muted); }
   @media print {
@@ -51,6 +62,11 @@
 <p>A partir da lista de doentes, o profissional poderá selecionar um doente e aceder à respetiva área clínica individual. Esta área funcionará como um pequeno dashboard, combinando informação relativamente estável — dados de identificação e história clínica — com informação que evolui ao longo do tempo.</p>
 <p>No dashboard deverá ser possível visualizar a evolução do índice de massa corporal (IMC) e acompanhar a frequência cardíaca do doente, obtida periodicamente a partir do backend.</p>
 <p>O objetivo não é desenvolver um sistema clínico completo, mas utilizar este cenário para explorar os principais mecanismos envolvidos no desenvolvimento de um frontend Web e na sua comunicação com um backend.</p>
+<img src="wireframes.png"
+
+     alt="Wireframes das páginas da aplicação de acompanhamento clínico"
+
+     class="wireframe">
 </section>
 
 <section>
@@ -72,8 +88,167 @@
 <p class="flow">Autenticação → Lista de doentes → Admissão de novo doente ou seleção de doente existente → Dashboard individual do doente</p>
 </section>
 
+
 <section>
-<h2>4. Autenticação</h2>
+<h2>4. Documentação da API disponibilizada</h2>
+<p>O backend é fornecido. Para desenvolver o frontend, deverão utilizar a API através dos endpoints abaixo. Considerem esta documentação como o <strong>contrato entre frontend e backend</strong>: não é necessário conhecer a implementação interna do servidor para consumir a API.</p>
+<p>A URL base utilizada nos exemplos é <code>http://localhost:3000/api</code>. Exceto no login e no health check, os pedidos são protegidos e devem incluir <code>Authorization: Bearer &lt;token&gt;</code>.</p>
+
+<table class="api-summary">
+<thead><tr><th>Método</th><th>Endpoint</th><th>Finalidade</th><th>JWT</th></tr></thead>
+<tbody>
+<tr><td><code>GET</code></td><td><code>/health</code></td><td>Verificar se a API está disponível</td><td>Não</td></tr>
+<tr><td><code>POST</code></td><td><code>/auth/login</code></td><td>Autenticar e obter o JWT</td><td>Não</td></tr>
+<tr><td><code>GET</code></td><td><code>/doctors/:id/patients</code></td><td>Listar os doentes associados ao médico</td><td>Sim</td></tr>
+<tr><td><code>POST</code></td><td><code>/doctors/:id/patients</code></td><td>Admitir um novo doente</td><td>Sim</td></tr>
+<tr><td><code>GET</code></td><td><code>/patients/:id</code></td><td>Consultar os dados de um doente</td><td>Sim</td></tr>
+<tr><td><code>GET</code></td><td><code>/patients/:id/measurements</code></td><td>Obter o histórico de peso, altura e IMC</td><td>Sim</td></tr>
+<tr><td><code>GET</code></td><td><code>/patients/:id/vitals/latest</code></td><td>Obter a frequência cardíaca simulada atual</td><td>Sim</td></tr>
+</tbody>
+</table>
+
+<h3>Detalhe dos endpoints</h3>
+
+<details class="endpoint">
+<summary><span class="method">POST</span><code>/auth/login</code> — Autenticação</summary>
+<div>
+<p><strong>Body:</strong> <code>application/json</code></p>
+<pre><code>{
+  "email": "miguel.doctor@example.org",
+  "password": "demo123"
+}</code></pre>
+<p><strong>Resposta de sucesso:</strong> contém o JWT e a informação do utilizador autenticado. O <code>id</code> devolvido deverá ser utilizado pelo frontend em vez de assumir um ID fixo.</p>
+<pre><code>{
+  "token": "...",
+  "user": {
+    "id": 10,
+    "name": "Dr. Miguel Ferreira",
+    "email": "miguel.doctor@example.org",
+    "role": "DOCTOR"
+  }
+}</code></pre>
+<p class="note">Credenciais de demonstração: <code>miguel.doctor@example.org</code> / <code>demo123</code>.</p>
+</div>
+</details>
+
+<details class="endpoint">
+<summary><span class="method">GET</span><code>/doctors/:id/patients</code> — Lista de doentes</summary>
+<div>
+<p>Substituam <code>:id</code> pelo ID do médico autenticado. A resposta é um array com os doentes associados a esse médico.</p>
+<pre><code>[
+  {
+    "id": 1,
+    "name": "Ana Martins",
+    "email": "ana.patient@example.org"
+  }
+]</code></pre>
+</div>
+</details>
+
+<details class="endpoint">
+<summary><span class="method">POST</span><code>/doctors/:id/patients</code> — Admitir novo doente</summary>
+<div>
+<p><strong>Body:</strong> <code>application/json</code></p>
+<pre><code>{
+  "name": "Maria Silva",
+  "email": "maria.silva@example.org",
+  "birthDate": "1982-04-16",
+  "sex": "F",
+  "admissionDate": "2026-09-19",
+  "height": 1.65,
+  "weight": 72,
+  "smoker": false,
+  "diabetes": false,
+  "hypertension": true,
+  "asthma": false,
+  "allergies": "Penicilina",
+  "medication": "Losartan"
+}</code></pre>
+<p>Em caso de sucesso, o backend cria o utilizador/doente, associa-o ao médico e regista a primeira medição. Guardem o <code>id</code> devolvido para poder consultar o novo doente.</p>
+</div>
+</details>
+
+<details class="endpoint">
+<summary><span class="method">GET</span><code>/patients/:id</code> — Dados do doente</summary>
+<div>
+<p>Devolve os dados necessários para preencher a área clínica individual, incluindo identificação, admissão, dados clínicos e medição atual.</p>
+<pre><code>{
+  "id": 1,
+  "name": "Ana Martins",
+  "email": "ana.patient@example.org",
+  "birthDate": "...",
+  "sex": "F",
+  "admissionDate": "...",
+  "height": 1.67,
+  "weight": 68,
+  "bmi": 24.4,
+  "clinicalHistory": {
+    "smoker": false,
+    "diabetes": false,
+    "hypertension": true,
+    "asthma": false,
+    "allergies": "...",
+    "medication": "..."
+  }
+}</code></pre>
+<p class="note">Os valores apresentados são ilustrativos do formato da resposta; consultem a API para obter os dados efetivos.</p>
+</div>
+</details>
+
+<details class="endpoint">
+<summary><span class="method">GET</span><code>/patients/:id/measurements</code> — Histórico de medições</summary>
+<div>
+<p>Devolve uma série cronológica que poderá ser utilizada para construir o gráfico de evolução do IMC.</p>
+<pre><code>[
+  {
+    "date": "2026-01-10",
+    "weight": 72,
+    "height": 1.67,
+    "bmi": 25.8
+  },
+  {
+    "date": "2026-05-10",
+    "weight": 69,
+    "height": 1.67,
+    "bmi": 24.7
+  }
+]</code></pre>
+</div>
+</details>
+
+<details class="endpoint">
+<summary><span class="method">GET</span><code>/patients/:id/vitals/latest</code> — Frequência cardíaca</summary>
+<div>
+<p>Devolve uma leitura simulada de frequência cardíaca. O valor é gerado no momento do pedido e <strong>não é armazenado</strong> na base de dados.</p>
+<pre><code>{
+  "patientId": 1,
+  "heartRate": 76,
+  "timestamp": "2026-09-19T13:30:00.000Z"
+}</code></pre>
+<p>Executem o pedido várias vezes e observem a alteração de <code>heartRate</code> e <code>timestamp</code>. No frontend, este endpoint será utilizado para implementar polling.</p>
+</div>
+</details>
+
+<h3>Códigos HTTP a considerar</h3>
+<table class="api-summary">
+<thead><tr><th>Status</th><th>Significado neste trabalho</th></tr></thead>
+<tbody>
+<tr><td class="status"><code>200 OK</code></td><td>Pedido realizado com sucesso.</td></tr>
+<tr><td class="status"><code>201 Created</code></td><td>Novo recurso criado com sucesso.</td></tr>
+<tr><td class="status"><code>400 Bad Request</code></td><td>Dados enviados inválidos ou incompletos.</td></tr>
+<tr><td class="status"><code>401 Unauthorized</code></td><td>Autenticação em falta ou token inválido.</td></tr>
+<tr><td class="status"><code>403 Forbidden</code></td><td>Utilizador autenticado, mas sem autorização para o recurso.</td></tr>
+<tr><td class="status"><code>404 Not Found</code></td><td>Recurso ou endpoint não encontrado.</td></tr>
+</tbody>
+</table>
+
+<div class="resources"><strong>🧪 Testar antes de programar</strong>
+<p>Antes de implementar cada pedido com <code>fetch()</code>, testem o endpoint através dos ficheiros <code>.http</code> fornecidos. No Visual Studio Code podem utilizar a extensão <strong>REST Client</strong> e executar cada pedido através de <em>Send Request</em>.</p>
+</div>
+</section>
+
+<section>
+<h2>6. Autenticação</h2>
 <p>A aplicação deverá iniciar com um formulário de autenticação. A submissão deverá ser tratada em JavaScript e originar um pedido ao endpoint de login através de <code>fetch()</code>.</p>
 <p>Após autenticação bem-sucedida, o frontend deverá guardar temporariamente o JWT e a informação necessária sobre o utilizador autenticado. Para este exercício poderá ser utilizado <code>sessionStorage</code>. Nos endpoints protegidos, o token deverá ser enviado no cabeçalho <code>Authorization: Bearer &lt;token&gt;</code>.</p>
 <div class="resources"><strong>📚 Documentação de apoio</strong><ul>
@@ -91,7 +266,7 @@ Que dados são enviados no login? Que dados são devolvidos? Onde se encontra o 
 </section>
 
 <section>
-<h2>5. Área do médico — lista de doentes</h2>
+<h2>6. Área do médico — lista de doentes</h2>
 <p>Após o login, o profissional deverá visualizar os doentes que lhe estão associados. A lista deverá ser obtida através da API e construída dinamicamente através da DOM API.</p>
 <p>Não deverá ser assumido um identificador fixo para o médico. Utilizem a informação do utilizador autenticado devolvida pelo backend. Cada doente deverá permitir navegar para a respetiva área clínica individual e deverá existir uma opção para admitir um novo doente.</p>
 <div class="resources"><strong>📚 Documentação de apoio</strong><ul>
@@ -102,9 +277,9 @@ Que dados são enviados no login? Que dados são devolvidos? Onde se encontra o 
 </section>
 
 <section>
-<h2>6. Admissão de um novo doente</h2>
+<h2>7. Admissão de um novo doente</h2>
 <p>Criem uma página ou área com um formulário para registar um novo doente.</p>
-<h3>6.1 Informação a recolher</h3>
+<h3>7.1 Informação a recolher</h3>
 <ul>
 <li>Identificação: nome, data de nascimento, sexo e email;</li>
 <li>Admissão: data de admissão, altura e peso;</li>
@@ -118,7 +293,7 @@ Que dados são enviados no login? Que dados são devolvidos? Onde se encontra o 
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input" target="_blank" rel="noopener">MDN — &lt;input&gt; types and attributes</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Form_validation" target="_blank" rel="noopener">MDN — Client-side form validation</a></li>
 </ul></div>
-<h3>6.2 Validação e envio</h3>
+<h3>7.2 Validação e envio</h3>
 <p>Utilizem atributos como <code>required</code>, <code>min</code> e <code>max</code>. A submissão deverá ser tratada através do evento <code>submit</code>. O JavaScript deverá ler os valores, construir um objeto, convertê-lo para JSON e enviá-lo ao backend através de um pedido POST.</p>
 <div class="question"><strong>Questão de reflexão</strong>
 Comparem o pedido GET utilizado para obter informação com o POST utilizado para criar um recurso. Que diferenças observam no método, headers, body e resposta?
@@ -134,7 +309,7 @@ Comparem o pedido GET utilizado para obter informação com o POST utilizado par
 </section>
 
 <section>
-<h2>7. Dashboard individual do doente</h2>
+<h2>8. Dashboard individual do doente</h2>
 <p>A página de detalhe deverá funcionar como um pequeno dashboard clínico. O identificador do doente poderá ser recebido através da query string e lido com <code>URLSearchParams</code>.</p>
 <div class="resources"><strong>📚 Documentação de apoio</strong><ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams" target="_blank" rel="noopener">MDN — URLSearchParams</a></li>
@@ -146,7 +321,7 @@ Comparem o pedido GET utilizado para obter informação com o POST utilizado par
 </section>
 
 <section>
-<h2>8. Evolução do IMC</h2>
+<h2>9. Evolução do IMC</h2>
 <p>Obtenham do backend os registos necessários para representar a evolução do IMC ao longo do tempo. Os dados deverão ser tratados em JavaScript e representados num gráfico de linhas.</p>
 <div class="resources"><strong>📚 Documentação de apoio</strong><ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map" target="_blank" rel="noopener">MDN — Array.map()</a></li>
@@ -161,7 +336,7 @@ Qual a diferença entre apresentar apenas o IMC atual e representar uma série t
 </section>
 
 <section>
-<h2>9. Frequência cardíaca — atualização dinâmica por polling</h2>
+<h2>10. Frequência cardíaca — atualização dinâmica por polling</h2>
 <p>O dashboard deverá conter um card com a frequência cardíaca atual e a hora da última atualização. Como requisito base, o frontend deverá consultar periodicamente o backend através de <code>fetch()</code> e utilizar <code>setInterval()</code> para implementar polling, sem recarregar a página.</p>
 <div class="resources"><strong>📚 Documentação de apoio</strong><ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/setInterval" target="_blank" rel="noopener">MDN — setInterval()</a></li>
@@ -178,7 +353,7 @@ Por que razão polling não corresponde a comunicação iniciada pelo servidor? 
 </section>
 
 <section>
-<h2>10. Desafio extra — WebSocket</h2>
+<h2>11. Desafio extra — WebSocket</h2>
 <p>Como desafio adicional, substituam o polling da frequência cardíaca por uma ligação WebSocket, permitindo que o backend envie novos valores através de uma ligação persistente.</p>
 <div class="resources"><strong>📚 Documentação de apoio</strong><ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API" target="_blank" rel="noopener">MDN — WebSocket API</a></li>
@@ -193,7 +368,7 @@ Quais as funcionalidades desta aplicação que manteriam baseadas em REST e quai
 </section>
 
 <section>
-<h2>11. DOM, eventos e segurança</h2>
+<h2>12. DOM, eventos e segurança</h2>
 <p>Privilegiem <code>document.createElement()</code>, <code>textContent</code>, <code>appendChild()</code> e outras operações explícitas sobre o DOM, em vez de inserir indiscriminadamente strings através de <code>innerHTML</code>.</p>
 <div class="resources"><strong>📚 Documentação de apoio</strong><ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML" target="_blank" rel="noopener">MDN — innerHTML (inclui considerações de segurança)</a></li>
@@ -208,7 +383,7 @@ Que risco existe se conteúdo proveniente do utilizador ou da API for inserido d
 </section>
 
 <section>
-<h2>12. Tratamento de erros HTTP</h2>
+<h2>13. Tratamento de erros HTTP</h2>
 <p>Verifiquem <code>response.ok</code> e apresentem mensagens adequadas ao utilizador.</p>
 <div class="resources"><strong>📚 Documentação de apoio</strong><ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Response/ok" target="_blank" rel="noopener">MDN — Response.ok</a></li>
@@ -221,17 +396,17 @@ Que risco existe se conteúdo proveniente do utilizador ou da API for inserido d
 </section>
 
 <section>
-<h2>13. Exploração com Developer Tools</h2>
+<h2>14. Exploração com Developer Tools</h2>
 <p>Analisem no Network pelo menos um login, um GET, o POST de criação de um doente e os pedidos periódicos de frequência cardíaca. Identifiquem URL, método, status, headers, payload quando aplicável e resposta. Localizem também o JWT.</p>
 </section>
 
 <section>
-<h2>14. Organização do JavaScript</h2>
+<h2>15. Organização do JavaScript</h2>
 <p>Identifiquem no código responsabilidades distintas: manipulação da interface/DOM, tratamento de eventos, lógica da aplicação, comunicação com a API e gestão de estado/sessão. Não é necessário implementar uma arquitetura complexa.</p>
 </section>
 
 <section>
-<h2>15. Entregável</h2>
+<h2>16. Entregável</h2>
 <ul>
 <li><code>backend/</code> — backend disponibilizado;</li>
 <li><code>frontend/index.html</code> — autenticação;</li>
@@ -244,7 +419,7 @@ Que risco existe se conteúdo proveniente do utilizador ou da API for inserido d
 </section>
 
 <section>
-<h2>16. Critérios de sucesso</h2>
+<h2>17. Critérios de sucesso</h2>
 <ul>
 <li>Autenticação funcional e utilização correta do JWT;</li><li>HTML semanticamente adequado;</li>
 <li>Lista de doentes obtida através da API;</li><li>Criação de doente através de formulário e POST JSON;</li>
@@ -256,7 +431,7 @@ Que risco existe se conteúdo proveniente do utilizador ou da API for inserido d
 </section>
 
 <section>
-<h2>17. Conceitos trabalhados</h2>
+<h2>18. Conceitos trabalhados</h2>
 <p>HTML semântico · formulários · validação HTML · DOM · eventos · JavaScript assíncrono · Fetch API · HTTP · REST · GET e POST · JSON · autenticação · autorização · JWT · sessionStorage · query strings · arrays e séries temporais · visualização de dados · polling · Developer Tools · tratamento de erros · segurança/XSS · WebSocket (extra) · separação de responsabilidades.</p>
 </section>
 </main>
