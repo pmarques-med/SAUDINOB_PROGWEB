@@ -77,7 +77,7 @@
 <li>Web Storage API, quando necessário;</li><li>Developer Tools do browser.</li>
 </ul>
 <p>Não devem ser utilizados frameworks frontend como React, Vue ou Angular. Poderá ser autorizada uma biblioteca exclusivamente para a representação gráfica da evolução do IMC.</p>
-<div class="resources"><strong>📚 Documentação de apoio</strong><ul>
+<div class="resources"><strong> Documentação de apoio</strong><ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements" target="_blank" rel="noopener">MDN — HTML elements reference</a></li>
 <li><a href="https://validator.w3.org/" target="_blank" rel="noopener">W3C — Markup Validation Service</a> (validar o HTML produzido)</li>
 </ul></div>
@@ -242,7 +242,7 @@
 </tbody>
 </table>
 
-<div class="resources"><strong>🧪 Testar antes de programar</strong>
+<div class="resources"><strong> Testar antes de programar</strong>
 <p>Antes de implementar cada pedido com <code>fetch()</code>, testem o endpoint através dos ficheiros <code>.http</code> fornecidos. No Visual Studio Code podem utilizar a extensão <strong>REST Client</strong> e executar cada pedido através de <em>Send Request</em>.</p>
 </div>
 </section>
@@ -251,7 +251,7 @@
 <h2>6. Autenticação</h2>
 <p>A aplicação deverá iniciar com um formulário de autenticação. A submissão deverá ser tratada em JavaScript e originar um pedido ao endpoint de login através de <code>fetch()</code>.</p>
 <p>Após autenticação bem-sucedida, o frontend deverá guardar temporariamente o JWT e a informação necessária sobre o utilizador autenticado. Para este exercício poderá ser utilizado <code>sessionStorage</code>. Nos endpoints protegidos, o token deverá ser enviado no cabeçalho <code>Authorization: Bearer &lt;token&gt;</code>.</p>
-<div class="resources"><strong>📚 Documentação de apoio</strong><ul>
+<div class="resources"><strong> Documentação de apoio</strong><ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch" target="_blank" rel="noopener">MDN — Using the Fetch API</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage" target="_blank" rel="noopener">MDN — sessionStorage</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API" target="_blank" rel="noopener">MDN — Web Storage API</a></li>
@@ -269,7 +269,7 @@ Que dados são enviados no login? Que dados são devolvidos? Onde se encontra o 
 <h2>6. Área do médico — lista de doentes</h2>
 <p>Após o login, o profissional deverá visualizar os doentes que lhe estão associados. A lista deverá ser obtida através da API e construída dinamicamente através da DOM API.</p>
 <p>Não deverá ser assumido um identificador fixo para o médico. Utilizem a informação do utilizador autenticado devolvida pelo backend. Cada doente deverá permitir navegar para a respetiva área clínica individual e deverá existir uma opção para admitir um novo doente.</p>
-<div class="resources"><strong>📚 Documentação de apoio</strong><ul>
+<div class="resources"><strong>Documentação de apoio</strong><ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement" target="_blank" rel="noopener">MDN — document.createElement()</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild" target="_blank" rel="noopener">MDN — appendChild()</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent" target="_blank" rel="noopener">MDN — textContent</a></li>
@@ -287,7 +287,7 @@ Que dados são enviados no login? Que dados são devolvidos? Onde se encontra o 
 <li>Alergias e medicação habitual.</li>
 </ul>
 <p>Utilizem controlos HTML adequados ao tipo de informação e organizem os campos recorrendo, quando adequado, a <code>form</code>, <code>fieldset</code>, <code>legend</code> e <code>label</code>.</p>
-<div class="resources"><strong>📚 Documentação de apoio</strong><ul>
+<div class="resources"><strong> Documentação de apoio</strong><ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/form" target="_blank" rel="noopener">MDN — &lt;form&gt;</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/How_to_structure_a_web_form" target="_blank" rel="noopener">MDN — How to structure a web form</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input" target="_blank" rel="noopener">MDN — &lt;input&gt; types and attributes</a></li>
@@ -311,7 +311,7 @@ Comparem o pedido GET utilizado para obter informação com o POST utilizado par
 <section>
 <h2>8. Dashboard individual do doente</h2>
 <p>A página de detalhe deverá funcionar como um pequeno dashboard clínico. O identificador do doente poderá ser recebido através da query string e lido com <code>URLSearchParams</code>.</p>
-<div class="resources"><strong>📚 Documentação de apoio</strong><ul>
+<div class="resources"><strong> Documentação de apoio</strong><ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams" target="_blank" rel="noopener">MDN — URLSearchParams</a></li>
 </ul></div>
 <ul>
@@ -323,7 +323,7 @@ Comparem o pedido GET utilizado para obter informação com o POST utilizado par
 <section>
 <h2>9. Evolução do IMC</h2>
 <p>Obtenham do backend os registos necessários para representar a evolução do IMC ao longo do tempo. Os dados deverão ser tratados em JavaScript e representados num gráfico de linhas.</p>
-<div class="resources"><strong>📚 Documentação de apoio</strong><ul>
+<div class="resources"><strong> Documentação de apoio</strong><ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map" target="_blank" rel="noopener">MDN — Array.map()</a></li>
 <li><a href="https://www.chartjs.org/docs/latest/" target="_blank" rel="noopener">Chart.js — Documentation</a> (caso esta biblioteca seja autorizada)</li>
 </ul></div>
@@ -338,7 +338,7 @@ Qual a diferença entre apresentar apenas o IMC atual e representar uma série t
 <section>
 <h2>10. Frequência cardíaca — atualização dinâmica por polling</h2>
 <p>O dashboard deverá conter um card com a frequência cardíaca atual e a hora da última atualização. Como requisito base, o frontend deverá consultar periodicamente o backend através de <code>fetch()</code> e utilizar <code>setInterval()</code> para implementar polling, sem recarregar a página.</p>
-<div class="resources"><strong>📚 Documentação de apoio</strong><ul>
+<div class="resources"><strong> Documentação de apoio</strong><ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/setInterval" target="_blank" rel="noopener">MDN — setInterval()</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch" target="_blank" rel="noopener">MDN — Using the Fetch API</a></li>
 </ul></div>
@@ -355,7 +355,7 @@ Por que razão polling não corresponde a comunicação iniciada pelo servidor? 
 <section>
 <h2>11. Desafio extra — WebSocket</h2>
 <p>Como desafio adicional, substituam o polling da frequência cardíaca por uma ligação WebSocket, permitindo que o backend envie novos valores através de uma ligação persistente.</p>
-<div class="resources"><strong>📚 Documentação de apoio</strong><ul>
+<div class="resources"><strong> Documentação de apoio</strong><ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API" target="_blank" rel="noopener">MDN — WebSocket API</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSocket" target="_blank" rel="noopener">MDN — WebSocket interface</a></li>
 </ul></div>
@@ -370,7 +370,7 @@ Quais as funcionalidades desta aplicação que manteriam baseadas em REST e quai
 <section>
 <h2>12. DOM, eventos e segurança</h2>
 <p>Privilegiem <code>document.createElement()</code>, <code>textContent</code>, <code>appendChild()</code> e outras operações explícitas sobre o DOM, em vez de inserir indiscriminadamente strings através de <code>innerHTML</code>.</p>
-<div class="resources"><strong>📚 Documentação de apoio</strong><ul>
+<div class="resources"><strong> Documentação de apoio</strong><ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML" target="_blank" rel="noopener">MDN — innerHTML (inclui considerações de segurança)</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/XSS" target="_blank" rel="noopener">MDN — Cross-site scripting (XSS)</a></li>
 </ul></div>
@@ -385,7 +385,7 @@ Que risco existe se conteúdo proveniente do utilizador ou da API for inserido d
 <section>
 <h2>13. Tratamento de erros HTTP</h2>
 <p>Verifiquem <code>response.ok</code> e apresentem mensagens adequadas ao utilizador.</p>
-<div class="resources"><strong>📚 Documentação de apoio</strong><ul>
+<div class="resources"><strong> Documentação de apoio</strong><ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Response/ok" target="_blank" rel="noopener">MDN — Response.ok</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status" target="_blank" rel="noopener">MDN — HTTP response status codes</a></li>
 </ul></div>
@@ -408,7 +408,6 @@ Que risco existe se conteúdo proveniente do utilizador ou da API for inserido d
 <section>
 <h2>16. Entregável</h2>
 <ul>
-<li><code>backend/</code> — backend disponibilizado;</li>
 <li><code>frontend/index.html</code> — autenticação;</li>
 <li><code>frontend/patients.html</code> — lista de doentes;</li>
 <li><code>frontend/new-patient.html</code> — formulário de admissão;</li>
